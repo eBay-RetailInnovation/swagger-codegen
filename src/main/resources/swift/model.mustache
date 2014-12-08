@@ -9,33 +9,72 @@ public class {{classname}}
     {{{description}}}
      */
     {{/description}}
-    private(set) public var {{name}}: {{datatype}}{{#isNotRequired}}?{{/isNotRequired}
+    private(set) public var {{name}}: {{datatype}}{{^required}}?{{/required}}
     {{newline}}
     {{/vars}}
     
     // MARK: - Initialization
-    private init({{#vars}}{{name}}: {{datatype}}{{#hasMore}}, {{/hasMore}}{{/vars}})
+    private init({{#vars}}{{name}}: {{datatype}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}{{/vars}})
     {
-        {{#vars}}self.{{name}} = {{name}}
+        {{#vars}}
+        self.{{name}} = {{name}}
         {{/vars}}
     }
     
-    public init(dictionary: [String: AnyObject])
+    public init?(dictionary: [String: AnyObject])
     {
+        {{#vars}}
+        {{#required}}
+        if let {{name}} = dictionary["{{basename}}"] as? {{datatype}}
+        {
+        {{/required}}
+        {{^required}}
+        if let {{name}} = dictionary["{{baseName}}"] as? {{datatype}}?
+        {
+        {{/required}}
+        {{/vars}}
         
+        {{#vars}}
+        self.{{name}} = {{name}}
+        {{/vars}}
+        
+        {{#vars}}
+        }
+        else
+        {
+            return nil
+        }
+        {{/vars}}
     }
     
+    public init(forcedDictionary: [String: AnyObject])
+    {
+        {{#vars}}
+        self.{{name}} = (forcedDictionary["{{baseName}}"] as? {{datatype}}){{#required}}!{{/required}}{{newline}}
+        {{/vars}}
+    }
+    
+    // MARK: - Dictionary Conversion
     public func dictionaryRepresentation() -> [String: AnyObject]
     {
         var dictionary: [String: AnyObject] = [:]
         
         {{#vars}}
-        
-        dictionary["{{name}}"] = self.{{name}}
-        
+        {{^required}}
+        dictionary["{{baseName}}"] = self.{{name}} ?? NSNull.null(){{newline}}
+        {{/required}}
+        {{#required}}
+        dictionary["{{baseName}}"] = self.{{name}}{{newline}}
+        {{/required}}
         {{/vars}}
         
         return dictionary
+    }
+    
+    // MARK: - Updating
+    public func parseDictionary()
+    {
+        
     }
 }
 {{/model}}

@@ -24,11 +24,6 @@ class SwiftGenerator extends BasicGenerator {
       "Bool")
 
   override def reservedWords = Set("void", "char", "short", "int", "void", "char", "short", "int", "long", "float", "double", "signed", "unsigned", "id", "const", "volatile", "in", "out", "inout", "bycopy", "byref", "oneway", "self", "super")
-
-  def foundationClasses = Set(
-    "NSNumber",
-    "NSObject",
-    "NSString")
   
   override def typeMapping = Map(
     "enum" -> "NSString",
@@ -54,7 +49,6 @@ class SwiftGenerator extends BasicGenerator {
   // naming for the models
   override def toModelName(name: String) = {
     (typeMapping.keys ++ 
-      foundationClasses ++ 
       importMapping.values ++ 
       defaultIncludes ++ 
       languageSpecificPrimitives

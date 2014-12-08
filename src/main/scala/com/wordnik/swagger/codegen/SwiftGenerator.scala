@@ -8,18 +8,20 @@ object SwiftGenerator extends SwiftGenerator {
 
 class SwiftGenerator extends BasicGenerator {
   override def defaultIncludes = Set(
-    "bool",
-    "int",
-    "NSString",
-    "NSObject", 
-    "NSArray",
-    "NSNumber")
+    "time_t",
+    "String",
+    "Int",
+    "Double", 
+    "Float",
+    "Bool")
 
   override def languageSpecificPrimitives = Set(
-    "NSNumber",
-    "NSString",
-    "NSObject",
-    "bool")
+      "time_t",
+      "String",
+      "Int",
+      "Double",
+      "Float",
+      "Bool")
 
   override def reservedWords = Set("void", "char", "short", "int", "void", "char", "short", "int", "long", "float", "double", "signed", "unsigned", "id", "const", "volatile", "in", "out", "inout", "bycopy", "byref", "oneway", "self", "super")
 
@@ -30,18 +32,18 @@ class SwiftGenerator extends BasicGenerator {
   
   override def typeMapping = Map(
     "enum" -> "NSString",
-    "date" -> "SWGDate",
-    "Date" -> "SWGDate",
-    "boolean" -> "NSNumber",
-    "string" -> "NSString",
-    "integer" -> "NSNumber",
-    "int" -> "NSNumber",
-    "float" -> "NSNumber",
-    "long" -> "NSNumber",
-    "double" -> "NSNumber",
-    "Array" -> "NSArray",
-    "array" -> "NSArray",
-    "List" -> "NSArray",
+    "date" -> "time_t",
+    "Date" -> "time_t",
+    "boolean" -> "Bool",
+    "string" -> "String",
+    "integer" -> "Int",
+    "int" -> "Int",
+    "float" -> "Float",
+    "long" -> "Int",
+    "double" -> "Double",
+    "Array" -> "Array",
+    "array" -> "Array",
+    "List" -> "Array",
     "object" -> "NSObject")
 
   override def importMapping = Map(

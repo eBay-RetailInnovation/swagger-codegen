@@ -1,0 +1,42 @@
+{{#models}}
+{{#model}}
+public class {{classname}}
+{
+    // MARK: - Properties
+    {{#vars}}
+    {{#description}}
+    /**
+    {{{description}}}
+     */
+    {{/description}}
+    private(set) public var {{name}}: {{datatype}}{{#isNotRequired}}?{{/isNotRequired}
+    {{newline}}
+    {{/vars}}
+    
+    // MARK: - Initialization
+    private init({{#vars}}{{name}}: {{datatype}}{{#hasMore}}, {{/hasMore}}{{/vars}})
+    {
+        {{#vars}}self.{{name}} = {{name}}
+        {{/vars}}
+    }
+    
+    public init(dictionary: [String: AnyObject])
+    {
+        
+    }
+    
+    public func dictionaryRepresentation() -> [String: AnyObject]
+    {
+        var dictionary: [String: AnyObject] = [:]
+        
+        {{#vars}}
+        
+        dictionary["{{name}}"] = self.{{name}}
+        
+        {{/vars}}
+        
+        return dictionary
+    }
+}
+{{/model}}
+{{/models}}

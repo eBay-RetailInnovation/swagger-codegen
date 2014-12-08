@@ -60,21 +60,21 @@ public class {{classname}}
         var dictionary: [String: AnyObject] = [:]
         
         {{#vars}}
-        {{^required}}
-        dictionary["{{baseName}}"] = self.{{name}} ?? NSNull.null(){{newline}}
-        {{/required}}
-        {{#required}}
-        dictionary["{{baseName}}"] = self.{{name}}{{newline}}
-        {{/required}}
+        dictionary["{{baseName}}"] = (self.{{name}}{{#complexType}}{{#isContainer}}{{^required}}?{{/required}}.map({ ({{nameSingular}}) in {{nameSingular}}.dictionaryRepresentation() }){{/isContainer}}{{#isNotContainer}}{{^required}}?{{/required}}.dictionaryRepresentation(){{/isNotContainer}}{{/complexType}}){{^required}} ?? NSNull.null(){{/required}}{{newline}}
         {{/vars}}
         
         return dictionary
     }
     
     // MARK: - Updating
-    public func parseDictionary()
+    public func parseDictionary(dictionary: [String: AnyObject])
     {
-        
+        {{#vars}}
+        if let {{name}}: {{datatype}}{{^required}}?{{/required}} = ((dictionary["{{baseName}}"] as? {{#complexType}}{{#isContainer}}[AnyObject]){{/isContainer}}{{#isNotContainer}}[String: AnyObject]).ri_flatMap({ (dictionary) in {{datatype}}(dictionary: dictionary) }){{/isNotContainer}}{{/complexType}}{{^complexType}}{{datatype}})){{/complexType}}
+        {
+            self.{{name}} = {{name}}
+        }
+        {{/vars}}
     }
 }
 {{/model}}

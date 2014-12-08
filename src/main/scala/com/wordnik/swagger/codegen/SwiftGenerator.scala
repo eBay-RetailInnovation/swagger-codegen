@@ -47,7 +47,7 @@ class SwiftGenerator extends BasicGenerator {
   override def importMapping = Map(
     "Date" -> "SWGDate")
 
-  override def toModelFilename(name: String) = "SWG" + name
+  override def toModelFilename(name: String) = "RI" + name
 
   // naming for the models
   override def toModelName(name: String) = {
@@ -59,7 +59,7 @@ class SwiftGenerator extends BasicGenerator {
     ).toSet.contains(name) match {
       case true => name(0).toUpper + name.substring(1)
       case _ => {
-        "SWG" + name(0).toUpper + name.substring(1)
+        "RI" + name(0).toUpper + name.substring(1)
       }
     }
   }
@@ -74,7 +74,7 @@ class SwiftGenerator extends BasicGenerator {
   }
 
   // naming for the apis
-  override def toApiName(name: String) = "SWG" + name(0).toUpper + name.substring(1) + "Api"
+  override def toApiName(name: String) = "RI" + name(0).toUpper + name.substring(1) + "API"
 
   // location of templates
   override def templateDir = "swift"

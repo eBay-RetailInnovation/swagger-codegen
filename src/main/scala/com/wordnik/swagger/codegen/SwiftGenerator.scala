@@ -145,11 +145,7 @@ class SwiftGenerator extends BasicGenerator {
       case n: Int => "NSArray"
     }
     val t = typeMapping.getOrElse(declaredType, declaredType)
-
-    (languageSpecificPrimitives.contains(t) && !foundationClasses.contains(t)) match {
-      case true => toModelName(t)
-      case _ => toModelName(t) + "*" // needs pointer
-    }
+    toModelName(t)
   }
 
   override def toDeclaration(obj: ModelProperty) = {

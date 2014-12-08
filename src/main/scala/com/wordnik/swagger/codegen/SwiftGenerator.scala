@@ -203,9 +203,9 @@ class SwiftGenerator extends BasicGenerator {
     properCase match {
       case "boolean" => "false"
       case "int" => "0"
-      case "long" => "0L"
-      case "float" => "0.0f"
-      case "double" => "0.0"
+      case "long" => "0"
+      case "float" => "0"
+      case "double" => "0"
       case "List" => {
         val inner = {
           obj.items match {

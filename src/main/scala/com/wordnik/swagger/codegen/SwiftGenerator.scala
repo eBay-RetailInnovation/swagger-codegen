@@ -224,7 +224,7 @@ class SwiftGenerator extends BasicGenerator {
         }
         "new ArrayList<" + inner + ">" + "()"
       }
-      case _ => "null"
+      case _ => "nil"
     }
   }
 }

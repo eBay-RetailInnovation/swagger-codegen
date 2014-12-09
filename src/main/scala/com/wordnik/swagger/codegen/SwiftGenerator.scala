@@ -21,7 +21,8 @@ class SwiftGenerator extends BasicGenerator {
       "Int",
       "Double",
       "Float",
-      "Bool")
+      "Bool",
+      "Array")
 
   override def reservedWords = Set("void", "char", "short", "int", "void", "char", "short", "int", "long", "float", "double", "signed", "unsigned", "id", "const", "volatile", "in", "out", "inout", "bycopy", "byref", "oneway", "self", "super")
   
@@ -139,57 +140,35 @@ class SwiftGenerator extends BasicGenerator {
   }
 
   override def toDeclaredType(dt: String): String = {
-    val declaredType = dt.indexOf("[") match {
-      case -1 => dt
-      case n: Int => "NSArray"
-    }
-    val t = typeMapping.getOrElse(declaredType, declaredType)
+    val t = typeMapping.getOrElse(dt, dt)
     toModelName(t)
   }
 
   override def toDeclaration(obj: ModelProperty) = {
-    var declaredType = toDeclaredType(obj.`type`)
-    declaredType.toLowerCase match {
-      case "list" => {
-        declaredType = "array"
-      }
-      case e: String => e
-    }
-
+    val declaredType = toDeclaredType(obj.`type`)
     val defaultValue = toDefaultValue(declaredType, obj)
-    declaredType match {
-      case "array" => {
-        val inner = {
-          obj.items match {
-            case Some(items) => {
-              if(items.ref != null) 
-                items.ref
-              else
-                items.`type`
-            }
-            case _ => {
-              println("failed on " + obj)
-              throw new Exception("no inner type defined")
+    
+    val expandedType = declaredType match {
+      case "Array" => {
+        val innerType = obj.items match {
+          case Some(items) => {
+            items.ref match {
+              case Some(ref) => ref
+              case _ => items.`type`
             }
           }
-        }
-        "NSArray"
-      }
-      case "set" => {
-        val inner = {
-          obj.items match {
-            case Some(items) => items.ref.getOrElse(items.`type`)
-            case _ => {
-              println("failed on " + obj)
-              throw new Exception("no inner type defined")
-            }
+          case _ => {
+            println("failed on " + obj)
+            throw new Exception("no inner type defined")
           }
         }
-        "NSArray"
+        
+        "[" + toDeclaredType(innerType) + "]"
       }
-      case _ =>
+      case _ => declaredType
     }
-    (declaredType, defaultValue)
+    
+    (expandedType, defaultValue)
   }
 
   override def escapeReservedWord(word: String) = "_" + word
@@ -201,23 +180,7 @@ class SwiftGenerator extends BasicGenerator {
       case "long" => "0"
       case "float" => "0"
       case "double" => "0"
-      case "List" => {
-        val inner = {
-          obj.items match {
-            case Some(items) => {
-              if(items.ref != null) 
-                items.ref
-              else
-                items.`type`
-            }
-            case _ => {
-              println("failed on " + properCase + ", " + obj)
-              throw new Exception("no inner type defined")
-            }
-          }
-        }
-        "new ArrayList<" + inner + ">" + "()"
-      }
+      case "Array" => "[]"
       case _ => "nil"
     }
   }

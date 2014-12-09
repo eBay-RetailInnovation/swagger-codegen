@@ -41,9 +41,6 @@ class SwiftGenerator extends BasicGenerator {
     "List" -> "Array",
     "object" -> "NSObject")
 
-  override def importMapping = Map(
-    "Date" -> "SWGDate")
-
   override def toModelFilename(name: String) = "RI" + name
 
   // naming for the models

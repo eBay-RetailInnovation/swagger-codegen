@@ -36,9 +36,6 @@ class SwiftGenerator extends BasicGenerator {
     "float" -> "Float",
     "long" -> "Int",
     "double" -> "Double",
-    "Array" -> "Array",
-    "array" -> "Array",
-    "List" -> "Array",
     "object" -> "NSObject")
 
   override def toModelFilename(name: String) = "RI" + name

@@ -25,7 +25,7 @@ public class {{classname}}
     {
         {{#vars}}
         {{#required}}
-        if let {{name}} = dictionary["{{basename}}"] as? {{datatype}}
+        if let {{name}} = dictionary["{{baseName}}"] as? {{datatype}}
         {
         {{/required}}
         {{^required}}

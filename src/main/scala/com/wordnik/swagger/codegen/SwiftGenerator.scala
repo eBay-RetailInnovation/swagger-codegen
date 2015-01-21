@@ -8,7 +8,7 @@ object SwiftGenerator extends SwiftGenerator {
 
 class SwiftGenerator extends BasicGenerator {
   override def defaultIncludes = Set(
-    "time_t",
+    "CFAbsoluteTime",
     "String",
     "Int",
     "Double", 
@@ -16,7 +16,7 @@ class SwiftGenerator extends BasicGenerator {
     "Bool")
 
   override def languageSpecificPrimitives = Set(
-      "time_t",
+      "CFAbsoluteTime",
       "String",
       "Int",
       "Double",
@@ -28,8 +28,9 @@ class SwiftGenerator extends BasicGenerator {
   
   override def typeMapping = Map(
     "enum" -> "NSString",
-    "date" -> "time_t",
-    "Date" -> "time_t",
+    "date" -> "CFAbsoluteTime",
+    "Date" -> "CFAbsoluteTime",
+    "date-time" -> "CFAbsoluteTime",
     "boolean" -> "Bool",
     "string" -> "String",
     "integer" -> "Int",
@@ -39,18 +40,20 @@ class SwiftGenerator extends BasicGenerator {
     "double" -> "Double",
     "object" -> "NSObject")
 
-  override def toModelFilename(name: String) = "RI" + name
+  override def toModelFilename(name: String) = toModelName(name)
 
   // naming for the models
   override def toModelName(name: String) = {
+    val stripGeneric = name.replaceAll("«", "").replaceAll("»", "")
+    
     (typeMapping.keys ++ 
       importMapping.values ++ 
       defaultIncludes ++ 
       languageSpecificPrimitives
-    ).toSet.contains(name) match {
-      case true => name(0).toUpper + name.substring(1)
+    ).toSet.contains(stripGeneric) match {
+      case true => stripGeneric(0).toUpper + stripGeneric.substring(1)
       case _ => {
-        "RI" + name(0).toUpper + name.substring(1)
+        "RI" + stripGeneric(0).toUpper + stripGeneric.substring(1)
       }
     }
   }

@@ -60,7 +60,7 @@ public class {{classname}}
         var dictionary: [String: AnyObject] = [:]
         
         {{#vars}}
-        dictionary["{{baseName}}"] = (self.{{name}}{{#complexType}}{{#isContainer}}{{^required}}?{{/required}}.map({ ({{nameSingular}}) in {{nameSingular}}.dictionaryRepresentation() }){{/isContainer}}{{#isNotContainer}}{{^required}}?{{/required}}.dictionaryRepresentation(){{/isNotContainer}}{{/complexType}}){{^required}} ?? NSNull.null(){{/required}}{{newline}}
+        dictionary["{{baseName}}"] = (self.{{name}}{{#complexType}}{{#isContainer}}{{^required}}?{{/required}}.map({ ({{nameSingular}}) in {{nameSingular}}.dictionaryRepresentation() }){{/isContainer}}{{#isNotContainer}}{{^required}}?{{/required}}.dictionaryRepresentation(){{/isNotContainer}}{{/complexType}}) {{^required}} ?? NSNull(){{/required}}{{newline}}
         {{/vars}}
         
         return dictionary

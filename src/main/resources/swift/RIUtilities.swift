@@ -1,6 +1,6 @@
 public protocol RIModel
 {
-    init?(dictionary: [String: AnyObject])
+    class func create(dictionary: [String: AnyObject]) -> Self?
     init(forcedDictionary: [String: AnyObject])
     func dictionaryRepresentation() -> [String: AnyObject]
     func parseDictionary(dictionary: [String: AnyObject])

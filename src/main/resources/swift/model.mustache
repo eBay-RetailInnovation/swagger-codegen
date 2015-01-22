@@ -14,14 +14,14 @@ public class {{classname}}: RIModel
     {{/vars}}
     
     // MARK: - Initialization
-    private init({{#vars}}{{name}}: {{datatype}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}{{/vars}})
+    public required init({{#vars}}{{name}}: {{datatype}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}{{/vars}})
     {
         {{#vars}}
         self.{{name}} = {{name}}
         {{/vars}}
     }
     
-    public required init?(dictionary: [String: AnyObject])
+    public class func create(dictionary: [String: AnyObject]) -> Self?
     {
         {{#vars}}
         {{#required}}
@@ -34,9 +34,7 @@ public class {{classname}}: RIModel
         {{/required}}
         {{/vars}}
         
-        {{#vars}}
-        self.{{name}} = {{name}}
-        {{/vars}}
+        return self({{#vars}}{{name}}: {{name}}{{#hasMore}}, {{/hasMore}}{{/vars}})
         
         {{#vars}}
         }
@@ -50,7 +48,7 @@ public class {{classname}}: RIModel
     public required init(forcedDictionary: [String: AnyObject])
     {
         {{#vars}}
-        self.{{name}} = ((forcedDictionary["{{baseName}}"] as? {{#isContainer}}{{#complexType}}[[String:AnyObject]]).map(RIBuildModelArray){{/complexType}}{{^complexType}}[{{datatype}}]){{/complexType}}{{/isContainer}}{{^isContainer}}{{#complexType}}[String:AnyObject]).ri_flatMap({ (data) in {{datatype}}(dictionary: data)}){{/complexType}}{{^complexType}}{{datatype}}){{/complexType}}{{/isContainer}}){{#required}}!{{/required}}{{newline}}
+        self.{{name}} = ((forcedDictionary["{{baseName}}"] as? {{#isContainer}}{{#complexType}}[[String:AnyObject]]).map(RIBuildModelArray){{/complexType}}{{^complexType}}[{{datatype}}]){{/complexType}}{{/isContainer}}{{^isContainer}}{{#complexType}}[String:AnyObject]).ri_flatMap({ (data) in {{datatype}}.create(data)}){{/complexType}}{{^complexType}}{{datatype}}){{/complexType}}{{/isContainer}}){{#required}}!{{/required}}{{newline}}
         {{/vars}}
     }
     

@@ -1,6 +1,6 @@
 {{#models}}
 {{#model}}
-public class {{classname}}
+public class {{classname}}: RIModel
 {
     // MARK: - Properties
     {{#vars}}
@@ -21,7 +21,7 @@ public class {{classname}}
         {{/vars}}
     }
     
-    public init?(dictionary: [String: AnyObject])
+    public required init?(dictionary: [String: AnyObject])
     {
         {{#vars}}
         {{#required}}
@@ -47,10 +47,10 @@ public class {{classname}}
         {{/vars}}
     }
     
-    public init(forcedDictionary: [String: AnyObject])
+    public required init(forcedDictionary: [String: AnyObject])
     {
         {{#vars}}
-        self.{{name}} = (forcedDictionary["{{baseName}}"] as? {{datatype}}){{#required}}!{{/required}}{{newline}}
+        self.{{name}} = ((forcedDictionary["{{baseName}}"] as? {{#isContainer}}{{#complexType}}[[String:AnyObject]]).map(RIBuildModelArray){{/complexType}}{{^complexType}}[{{datatype}}]){{/complexType}}{{/isContainer}}{{^isContainer}}{{#complexType}}[String:AnyObject]).ri_flatMap({ (data) in {{datatype}}(dictionary: data)}){{/complexType}}{{^complexType}}{{datatype}}){{/complexType}}{{/isContainer}}){{#required}}!{{/required}}{{newline}}
         {{/vars}}
     }
     
@@ -70,10 +70,10 @@ public class {{classname}}
     public func parseDictionary(dictionary: [String: AnyObject])
     {
         {{#vars}}
-        if let {{name}}: {{datatype}}{{^required}}?{{/required}} = ((dictionary["{{baseName}}"] as? {{#complexType}}{{#isContainer}}[AnyObject]){{/isContainer}}{{#isNotContainer}}[String: AnyObject]).ri_flatMap({ (dictionary) in {{datatype}}(dictionary: dictionary) }){{/isNotContainer}}{{/complexType}}{{^complexType}}{{datatype}})){{/complexType}}
-        {
-            self.{{name}} = {{name}}
-        }
+        //if let {{name}}: {{#required}}{{datatype}} {{/required}}{{^required}}{{datatype}}? {{/required}} = ((dictionary["{{baseName}}"] as? {{#complexType}}{{#isContainer}}[AnyObject]{{^required}}?{{/required}}){{/isContainer}}{{#isNotContainer}}[String: AnyObject]{{^required}}?{{/required}}).ri_flatMap({ (dictionary) in {{datatype}}(dictionary: dictionary) })){{/isNotContainer}}{{/complexType}}{{^complexType}}{{datatype}}{{^required}}?{{/required}})){{/complexType}}
+        //{
+        //    self.{{name}} = {{name}}
+        //}
         {{/vars}}
     }
 }

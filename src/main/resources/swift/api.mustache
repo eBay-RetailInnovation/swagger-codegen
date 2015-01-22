@@ -12,8 +12,22 @@ public class {{classname}}
     !{{paramName}} {{description}}
     {{/allParams}}
     */
-    public func {{nickname}}({{#allParams}}{{#secondaryParam}}{{paramName}}{{/secondaryParam}}{{paramName}}: {{{dataType}}}, {{/allParams}}completion: {{#returnBaseType}}(output: {{returnType}}) -> () {{/returnBaseType}}{{^returnBaseType}}() -> () {{/returnBaseType}}, failure: (error: NSError?) -> ())
+    public func {{nickname}}({{#allParams}}{{paramName}}: {{{dataType}}}, {{/allParams}}completion: {{#returnBaseType}}(output: {{returnType}}) -> () {{/returnBaseType}}{{^returnBaseType}}() -> () {{/returnBaseType}}, failure: (error: NSError?) -> ())
     {
+        let URL = NSURL()
+        let builder = SVRequestParameterBuilder(URL: URL, method: .{{httpMethod}})
+        
+        {{#formParams}}
+        builder["{{baseName}}"] = {{paramName}}
+        {{/formParams}}
+        
+        {{#queryParams}}
+        builder["{{baseName}}"] = {{paramName}}
+        {{/queryParams}}
+        
+        {{#headerParams}}
+        builder.headers["{{baseName}}"] = {{paramName}}
+        {{/headerParams}}
     }
     
     {{/operation}}

@@ -137,7 +137,7 @@ class SwiftGenerator extends BasicGenerator {
   override def processResponseDeclaration(responseClass: String): Option[String] = {
     processResponseClass(responseClass) match {
       case Some("void") => Some("void")
-      case Some(e) => Some(e + "*")
+      case Some(e) => Some(e)
       case _ => Some(responseClass)
     }
   }

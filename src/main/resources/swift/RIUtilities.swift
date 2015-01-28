@@ -56,17 +56,6 @@ func RIBuildModelArray<T:RIModel>(input: [[String:AnyObject]]) -> [T]
     return input.ri_filterMap({ (data) in T(dictionary: data) })
 }
 
-func RIFlattenOptional<T>(optional: T??) -> T?
-{
-    switch optional
-    {
-        case .Some(let value):
-            return value
-        case .None:
-            return nil
-    }
-}
-
 func RICreateError(message: String, URL: NSURL, code: Int) -> NSError
 {
     let dictionary: [NSObject:AnyObject] = [

@@ -63,3 +63,28 @@ func RICreateError(message: String, URL: NSURL, code: Int) -> NSError
     
     return NSError(domain: "com.batcavelabs", code: code, userInfo: dictionary)
 }
+
+func RIParsePrimitive(input: AnyObject) -> CFAbsoluteTime?
+{
+    return 0
+}
+
+func RIParsePrimitive(input: AnyObject) -> String?
+{
+    return input as? String
+}
+
+func RIParsePrimitive(input: AnyObject) -> Int?
+{
+    return (input as? NSNumber)?.integerValue
+}
+
+func RIParsePrimitive(input: AnyObject) -> Float?
+{
+    return (input as? NSNumber)?.floatValue
+}
+
+func RIParsePrimitive(input: AnyObject) -> Bool?
+{
+    return (input as? NSNumber)?.boolValue
+}

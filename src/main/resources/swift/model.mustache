@@ -68,10 +68,31 @@ public class {{classname}}: RIModel
     public func parseDictionary(dictionary: [String: AnyObject])
     {
         {{#vars}}
-        if let {{name}}: {{#required}}{{datatype}} {{/required}}{{^required}}{{datatype}}? {{/required}} = ((dictionary["{{baseName}}"] as? {{#complexType}}{{#isContainer}}[AnyObject]{{^required}}?{{/required}}){{/isContainer}}{{#isNotContainer}}[String: AnyObject]{{^required}}?{{/required}}).ri_flatMap({ (dictionary) in {{datatype}}(dictionary: dictionary) })){{/isNotContainer}}{{/complexType}}{{^complexType}}{{datatype}}{{^required}}?{{/required}})){{/complexType}}
+        
+        {{#complexType}}
+        
+        {{#isContainer}}
+        if let {{name}}: {{#required}}{{datatype}} {{/required}}{{^required}}{{datatype}}? {{/required}} = (dictionary["{{baseName}}"] as? [[String:AnyObject]]).ri_flatMap(RIBuildModelArray)
         {
             self.{{name}} = {{name}}
         }
+        {{/isContainer}}
+        
+        {{^isContainer}}
+        if let {{name}} = (dictionary["{{baseName}}"] as? [String:AnyObject]).ri_flatMap({ (dictionary) in {{datatype}}.create(dictionary) })
+        {
+            self.{{name}} = {{name}}
+        }
+        {{/isContainer}}
+        
+        {{/complexType}}
+        
+        {{^complexType}}
+        if let {{name}}: {{#required}}{{datatype}} {{/required}}{{^required}}{{datatype}}? {{/required}} = dictionary["{{baseName}}"].ri_flatMap(RIParsePrimitive)
+        {
+            self.{{name}} = {{name}}
+        }
+        {{/complexType}}
         {{/vars}}
     }
 }

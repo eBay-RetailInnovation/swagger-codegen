@@ -29,7 +29,7 @@ extension {{classname}}
         path = path.stringByReplacingOccurrencesOfString("{" + "{{paramName}}" + "}", withString: "\({{paramName}})")
         {{/pathParams}}
         
-        if let URL = NSURL()
+        if let URL = NSURL(string: path)
         {
             let builder = SVRequestParameterBuilder(URL: URL, method: .{{httpMethod}})
     

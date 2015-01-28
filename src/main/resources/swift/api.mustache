@@ -65,6 +65,20 @@ extension {{classname}}
                         case {{code}}:
                         {{#returnBaseType}}
                         {{#responseModel}}
+                        
+                        {{#returnContainer}}
+                        if let JSONArray = JSON.basicArray as? [[String:AnyObject]]
+                        {
+                            let array: {{returnType}} = RIBuildModelArray(JSONArray)
+                            completion(output: array)
+                        }
+                        else
+                        {
+                            failure(error: RICreateError("Failed to extract JSON array", URL, {{code}}))
+                        }
+                        {{/returnContainer}}
+                        
+                        {{^returnContainer}}
                         if let JSONObject = JSON.basicObject
                         {
                             if let model = {{returnBaseType}}.create(JSONObject)
@@ -78,8 +92,9 @@ extension {{classname}}
                         }
                         else
                         {
-                            failure(error: RICreateError("Failed to extract JSON", URL, {{code}}))
+                            failure(error: RICreateError("Failed to extract JSON object", URL, {{code}}))
                         }
+                        {{/returnContainer}}
                         {{/responseModel}}
                         
                         {{^responseModel}}

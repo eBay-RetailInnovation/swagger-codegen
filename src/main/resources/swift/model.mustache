@@ -68,15 +68,6 @@ public class {{classname}}: RIModel
         {{/vars}}
     }
     
-    public required init(forcedDictionary: [String: AnyObject])
-    {
-        super.init()
-        
-        {{#vars}}
-        self.{{name}} = ((forcedDictionary["{{baseName}}"] as? {{#isContainer}}{{#complexType}}[[String:AnyObject]]).map(RIBuildModelArray){{/complexType}}{{^complexType}}[{{datatype}}]){{/complexType}}{{/isContainer}}{{^isContainer}}{{#complexType}}[String:AnyObject]).ri_flatMap({ (data) in {{datatype}}(dictionary: data)}){{/complexType}}{{^complexType}}{{datatype}}){{/complexType}}{{/isContainer}}){{#required}}!{{/required}}{{newline}}
-        {{/vars}}
-    }
-    
     // MARK: - Dictionary Conversion
     public override func dictionaryRepresentation() -> [String: AnyObject]
     {

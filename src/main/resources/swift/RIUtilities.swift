@@ -9,10 +9,6 @@ public class RIModel
         self.init()
     }
     
-    public required init(forcedDictionary: [String: AnyObject])
-    {
-    }
-    
     public func dictionaryRepresentation() -> [String: AnyObject]
     {
         return [:]

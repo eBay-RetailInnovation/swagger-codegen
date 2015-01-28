@@ -53,3 +53,13 @@ func RIFlattenOptional<T>(optional: T??) -> T?
             return nil
     }
 }
+
+func RICreateError(message: String, URL: NSURL, code: Int) -> NSError
+{
+    let dictionary: [NSObject:AnyObject] = [
+        NSLocalizedDescriptionKey: message,
+        NSURLErrorKey: URL
+    ]
+    
+    return NSError(domain: "com.batcavelabs", code: code, userInfo: dictionary)
+}

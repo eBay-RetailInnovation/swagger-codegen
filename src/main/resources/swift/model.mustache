@@ -24,14 +24,25 @@ public class {{classname}}: RIModel
     public class func create(dictionary: [String: AnyObject]) -> Self?
     {
         {{#vars}}
-        {{#required}}
-        if let {{name}} = dictionary["{{baseName}}"] as? {{datatype}}
+        
+        {{#complexType}}
+        
+        {{#isContainer}}
+        if let {{name}}: {{#required}}{{datatype}} {{/required}}{{^required}}{{datatype}}? {{/required}} = (dictionary["{{baseName}}"] as? [[String:AnyObject]]).ri_flatMap(RIBuildModelArray)
         {
-        {{/required}}
-        {{^required}}
-        if let {{name}} = dictionary["{{baseName}}"] as? {{datatype}}?
+        {{/isContainer}}
+        
+        {{^isContainer}}
+        if let {{name}} = (dictionary["{{baseName}}"] as? [String:AnyObject]).ri_flatMap({ (dictionary) in {{datatype}}.create(dictionary) })
         {
-        {{/required}}
+        {{/isContainer}}
+        
+        {{/complexType}}
+        
+        {{^complexType}}
+        if let {{name}}: {{#required}}{{datatype}} {{/required}}{{^required}}{{datatype}}? {{/required}} = dictionary["{{baseName}}"].ri_flatMap(RIParsePrimitive)
+        {
+        {{/complexType}}
         {{/vars}}
         
         return self({{#vars}}{{name}}: {{name}}{{#hasMore}}, {{/hasMore}}{{/vars}})

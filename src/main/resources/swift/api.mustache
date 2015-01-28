@@ -57,7 +57,51 @@ extension {{classname}}
             
             SVRequest(request: builder.request).JSON(
                 { (handler, JSON, response) in
+                    let statusCode = (response as NSHTTPURLResponse).statusCode
                     
+                    switch statusCode {
+                        {{#errorList}}
+                        
+                        case {{code}}:
+                        {{#returnBaseType}}
+                        {{#responseModel}}
+                        if let JSONObject = JSON.basicObject
+                        {
+                            if let model = {{returnBaseType}}.create(JSONObject)
+                            {
+                                completion(output: model)
+                            }
+                            else
+                            {
+                                failure(error: RICreateError("Failed to create model", URL, {{code}}))
+                            }
+                        }
+                        else
+                        {
+                            failure(error: RICreateError("Failed to extract JSON", URL, {{code}}))
+                        }
+                        {{/responseModel}}
+                        
+                        {{^responseModel}}
+                        failure(error: RICreateError("{{reason}}", URL, {{code}}))
+                        {{/responseModel}}
+                        {{/returnBaseType}}
+                        
+                        {{^returnBaseType}}
+                        if statusCode >= 200 && statusCode < 300
+                        {
+                            completion()
+                        }
+                        else
+                        {
+                            failure(error: RICreateError("{{reason}}", URL, {{code}}))
+                        }
+                        {{/returnBaseType}}
+                        
+                        {{/errorList}}
+                        default:
+                            failure(error: RICreateError("Unsupported response code: \(statusCode)", URL, statusCode))
+                    }
                 },
                 failure: { (handler, error, response) in
                     failure(error: error)

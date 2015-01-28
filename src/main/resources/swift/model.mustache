@@ -68,7 +68,7 @@ public class {{classname}}: RIModel
     public func parseDictionary(dictionary: [String: AnyObject])
     {
         {{#vars}}
-        if let {{name}}: {{#required}}{{datatype}} {{/required}}{{^required}}{{datatype}}? {{/required}} = ((dictionary["{{baseName}}"] as? {{#complexType}}{{#isContainer}}[AnyObject]{{^required}}?{{/required}}){{/isContainer}}{{#isNotContainer}}[String: AnyObject]{{^required}}?{{/required}}).ri_flatMap({ (dictionary) in {{datatype}}(dictionary: dictionary) })){{/isNotContainer}}{{/complexType}}{{^complexType}}{{datatype}}{{^required}}?{{/required}})){{/complexType}}
+        if let {{name}} = ((dictionary["{{baseName}}"] as? {{#complexType}}{{#isContainer}}[AnyObject]{{^required}}?{{/required}}){{/isContainer}}{{#isNotContainer}}[String: AnyObject]{{^required}}?{{/required}}).ri_flatMap({ (dictionary) in {{datatype}}(dictionary: dictionary) })){{/isNotContainer}}{{/complexType}}{{^complexType}}{{datatype}}{{^required}}?{{/required}})){{/complexType}}
         {
             self.{{name}} = {{name}}
         }

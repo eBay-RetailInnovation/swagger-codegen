@@ -329,7 +329,8 @@ class Codegen(config: CodegenConfig) {
         "modelPackage" -> config.modelPackage,
         "description" -> model.description,
         "modelJson" -> writeJson(model),
-        "newline" -> "\n")
+        "newline" -> "\n",
+        "space" -> " ")
 
     val l = new ListBuffer[AnyRef]
 

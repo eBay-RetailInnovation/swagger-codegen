@@ -26,7 +26,7 @@ extension {{classname}}
     {
         var path = "{{path}}"
         {{#pathParams}}
-        path = path.stringByReplacingOccurrencesOfString("{" + "{{paramName}}" + "}", withString: "\({{paramName}})")
+        path = path.stringByReplacingOccurrencesOfString("{" + "{{baseName}}" + "}", withString: "\({{paramName}})")
         {{/pathParams}}
         
         if let URL = NSURL(string: path)

@@ -46,14 +46,19 @@ class SwiftGenerator extends BasicGenerator {
   override def toModelName(name: String) = {
     val stripGeneric = name.replaceAll("«", "").replaceAll("»", "")
     
-    (typeMapping.keys ++ 
-      importMapping.values ++ 
-      defaultIncludes ++ 
-      languageSpecificPrimitives
-    ).toSet.contains(stripGeneric) match {
-      case true => stripGeneric(0).toUpper + stripGeneric.substring(1)
-      case _ => {
-        "RI" + stripGeneric(0).toUpper + stripGeneric.substring(1)
+    if (stripGeneric.startsWith("Array[")) {
+      stripGeneric.stripPrefix("Array")
+    }
+    else {
+      (typeMapping.keys ++ 
+        importMapping.values ++ 
+        defaultIncludes ++ 
+        languageSpecificPrimitives
+      ).toSet.contains(stripGeneric) match {
+        case true => stripGeneric(0).toUpper + stripGeneric.substring(1)
+        case _ => {
+          "RI" + stripGeneric(0).toUpper + stripGeneric.substring(1)
+        }
       }
     }
   }
@@ -106,7 +111,7 @@ class SwiftGenerator extends BasicGenerator {
           case "void" => None
           case e: String => {
             if(responseClass.toLowerCase.startsWith("array") || responseClass.toLowerCase.startsWith("list"))
-              Some("NSArray")
+              Some(toModelName(responseClass))
             else
               Some(toModelName(responseClass))
           }

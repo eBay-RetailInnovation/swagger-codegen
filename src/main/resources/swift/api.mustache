@@ -81,7 +81,7 @@ extension {{classname}}
                         {{^returnContainer}}
                         if let JSONObject = JSON.basicObject
                         {
-                            if let model = {{returnBaseType}}.create(JSONObject)
+                            if let model = {{returnBaseType}}(dictionary: JSONObject)
                             {
                                 completion(output: model)
                             }

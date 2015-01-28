@@ -408,6 +408,7 @@ class Codegen(config: CodegenConfig) {
     if(l.size > 0) {
       val last = l.last.asInstanceOf[HashMap[String, String]]
       last.remove("hasMore")
+      data += "hasVars" -> "true"
     }
     data += "vars" -> l
     data += "imports" -> imports.toSet

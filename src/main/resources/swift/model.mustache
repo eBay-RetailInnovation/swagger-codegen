@@ -2,26 +2,37 @@
 {{#model}}
 public class {{classname}}: RIModel
 {
+    {{#hasVars}}
     // MARK: - Properties
+    {{/hasVars}}
     {{#vars}}
     {{#description}}
     /**
     {{{description}}}
      */
     {{/description}}
-    private(set) public var {{name}}: {{datatype}}{{^required}}?{{/required}}
+    private(set) public var {{name}}: {{datatype}}{{#required}}! {{/required}}{{^required}}? {{/required}} = nil
     {{newline}}
     {{/vars}}
     
     // MARK: - Initialization
-    public required init({{#vars}}{{name}}: {{datatype}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}{{/vars}})
+    {{#hasVars}}
+    public init({{#vars}}{{name}}: {{datatype}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}{{/vars}})
     {
+        super.init()
+        
         {{#vars}}
         self.{{name}} = {{name}}
         {{/vars}}
     }
+    {{/hasVars}}
     
-    public class func create(dictionary: [String: AnyObject]) -> Self?
+    override init()
+    {
+        super.init()
+    }
+    
+    public convenience required init?(dictionary: [String: AnyObject])
     {
         {{#vars}}
         
@@ -33,7 +44,7 @@ public class {{classname}}: RIModel
         {{/isContainer}}
         
         {{^isContainer}}
-        if let {{name}} = (dictionary["{{baseName}}"] as? [String:AnyObject]).ri_flatMap({ (dictionary) in {{datatype}}.create(dictionary) })
+        if let {{name}} = (dictionary["{{baseName}}"] as? [String:AnyObject]).ri_flatMap({ (dictionary) in {{datatype}}(dictionary: dictionary) })
         {
         {{/isContainer}}
         
@@ -45,12 +56,13 @@ public class {{classname}}: RIModel
         {{/complexType}}
         {{/vars}}
         
-        return self({{#vars}}{{name}}: {{name}}{{#hasMore}}, {{/hasMore}}{{/vars}})
+        self.init({{#vars}}{{name}}: {{name}}{{#hasMore}}, {{/hasMore}}{{/vars}})
         
         {{#vars}}
         }
         else
         {
+            self.init()
             return nil
         }
         {{/vars}}
@@ -58,13 +70,15 @@ public class {{classname}}: RIModel
     
     public required init(forcedDictionary: [String: AnyObject])
     {
+        super.init()
+        
         {{#vars}}
-        self.{{name}} = ((forcedDictionary["{{baseName}}"] as? {{#isContainer}}{{#complexType}}[[String:AnyObject]]).map(RIBuildModelArray){{/complexType}}{{^complexType}}[{{datatype}}]){{/complexType}}{{/isContainer}}{{^isContainer}}{{#complexType}}[String:AnyObject]).ri_flatMap({ (data) in {{datatype}}.create(data)}){{/complexType}}{{^complexType}}{{datatype}}){{/complexType}}{{/isContainer}}){{#required}}!{{/required}}{{newline}}
+        self.{{name}} = ((forcedDictionary["{{baseName}}"] as? {{#isContainer}}{{#complexType}}[[String:AnyObject]]).map(RIBuildModelArray){{/complexType}}{{^complexType}}[{{datatype}}]){{/complexType}}{{/isContainer}}{{^isContainer}}{{#complexType}}[String:AnyObject]).ri_flatMap({ (data) in {{datatype}}(dictionary: data)}){{/complexType}}{{^complexType}}{{datatype}}){{/complexType}}{{/isContainer}}){{#required}}!{{/required}}{{newline}}
         {{/vars}}
     }
     
     // MARK: - Dictionary Conversion
-    public func dictionaryRepresentation() -> [String: AnyObject]
+    public override func dictionaryRepresentation() -> [String: AnyObject]
     {
         var dictionary: [String: AnyObject] = [:]
         
@@ -76,7 +90,7 @@ public class {{classname}}: RIModel
     }
     
     // MARK: - Updating
-    public func parseDictionary(dictionary: [String: AnyObject])
+    public override func parseDictionary(dictionary: [String: AnyObject])
     {
         {{#vars}}
         
@@ -90,7 +104,7 @@ public class {{classname}}: RIModel
         {{/isContainer}}
         
         {{^isContainer}}
-        if let {{name}} = (dictionary["{{baseName}}"] as? [String:AnyObject]).ri_flatMap({ (dictionary) in {{datatype}}.create(dictionary) })
+        if let {{name}} = (dictionary["{{baseName}}"] as? [String:AnyObject]).ri_flatMap({ (dictionary) in {{datatype}}(dictionary: dictionary) })
         {
             self.{{name}} = {{name}}
         }

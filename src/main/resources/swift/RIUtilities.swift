@@ -1,9 +1,26 @@
-public protocol RIModel
+public class RIModel
 {
-    class func create(dictionary: [String: AnyObject]) -> Self?
-    init(forcedDictionary: [String: AnyObject])
-    func dictionaryRepresentation() -> [String: AnyObject]
-    func parseDictionary(dictionary: [String: AnyObject])
+    init()
+    {
+    }
+    
+    public convenience required init?(dictionary: [String: AnyObject])
+    {
+        self.init()
+    }
+    
+    public required init(forcedDictionary: [String: AnyObject])
+    {
+    }
+    
+    public func dictionaryRepresentation() -> [String: AnyObject]
+    {
+        return [:]
+    }
+    
+    public func parseDictionary(dictionary: [String: AnyObject])
+    {
+    }
 }
 
 extension Optional
@@ -40,7 +57,7 @@ extension Array
 
 func RIBuildModelArray<T:RIModel>(input: [[String:AnyObject]]) -> [T]
 {
-    return input.ri_filterMap({ (data) in T.create(data) })
+    return input.ri_filterMap({ (data) in T(dictionary: data) })
 }
 
 func RIFlattenOptional<T>(optional: T??) -> T?

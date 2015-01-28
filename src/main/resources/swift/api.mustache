@@ -1,35 +1,62 @@
 {{#operations}}
 public class {{classname}}
 {
-    {{#operation}}
+}
+
+
+{{#operation}}
+{{#returnBaseType}}
+extension {{returnType}}
+{{/returnBaseType}}
+{{^returnBaseType}}
+extension {{classname}}
+{{/returnBaseType}}
+{
     /**
     {{{summary}}}
     {{#notes}}
     {{{notes}}}
     {{/notes}}
-    
+
     {{#allParams}}
     !{{paramName}} {{description}}
     {{/allParams}}
     */
-    public func {{nickname}}({{#allParams}}{{paramName}}: {{{dataType}}}, {{/allParams}}completion: {{#returnBaseType}}(output: {{returnType}}) -> () {{/returnBaseType}}{{^returnBaseType}}() -> () {{/returnBaseType}}, failure: (error: NSError?) -> ())
+    public class func {{nickname}}({{#allParams}}{{paramName}}: {{{dataType}}}, {{/allParams}}completion: {{#returnBaseType}}(output: {{returnType}}) -> () {{/returnBaseType}}{{^returnBaseType}}() -> () {{/returnBaseType}}, failure: (error: NSError?) -> ())
     {
-        let URL = NSURL()
-        let builder = SVRequestParameterBuilder(URL: URL, method: .{{httpMethod}})
+        var path = "{{path}}"
+        {{#pathParams}}
+        path = path.stringByReplacingOccurrencesOfString("{" + "{{paramName}}" + "}", withString: "\({{paramName}})")
+        {{/pathParams}}
         
-        {{#formParams}}
-        builder["{{baseName}}"] = {{paramName}}
-        {{/formParams}}
-        
-        {{#queryParams}}
-        builder["{{baseName}}"] = {{paramName}}
-        {{/queryParams}}
-        
-        {{#headerParams}}
-        builder.headers["{{baseName}}"] = {{paramName}}
-        {{/headerParams}}
-    }
+        if let URL = NSURL()
+        {
+            let builder = SVRequestParameterBuilder(URL: URL, method: .{{httpMethod}})
     
-    {{/operation}}
+            {{#formParams}}
+            builder["{{baseName}}"] = "\({{paramName}})"
+            {{/formParams}}
+    
+            {{#queryParams}}
+            builder["{{baseName}}"] = "\({{paramName}})"
+            {{/queryParams}}
+            
+            {{#bodyParams}}
+            for (key, value) in {{paramName}}.dictionaryRepresentation()
+            {
+                if !(value is NSNull)
+                {
+                    builder[key] = "\(value)"
+                }
+            }
+            {{/bodyParams}}
+    
+            {{#headerParams}}
+            builder.headers["{{baseName}}"] = "\({{paramName}})"
+            {{/headerParams}}
+        }
+    }
 }
+
+{{/operation}}
 {{/operations}}

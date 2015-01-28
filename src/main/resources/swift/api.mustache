@@ -54,6 +54,15 @@ extension {{classname}}
             {{#headerParams}}
             builder.headers["{{baseName}}"] = "\({{paramName}})"
             {{/headerParams}}
+            
+            SVRequest(request: builder.request).JSON(
+                { (handler, JSON, response) in
+                    
+                },
+                failure: { (handler, error, response) in
+                    failure(error: error)
+                }
+            )
         }
     }
 }

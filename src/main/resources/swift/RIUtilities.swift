@@ -40,7 +40,7 @@ extension Array
 
 func RIBuildModelArray<T:RIModel>(input: [[String:AnyObject]]) -> [T]
 {
-    return input.ri_filterMap({ (data) in T(dictionary: data) })
+    return input.ri_filterMap({ (data) in T.create(data) })
 }
 
 func RIFlattenOptional<T>(optional: T??) -> T?

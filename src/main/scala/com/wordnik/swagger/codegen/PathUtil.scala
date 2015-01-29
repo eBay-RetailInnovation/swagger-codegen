@@ -58,6 +58,13 @@ trait PathUtil {
   def apiNameFromPath(apiPath: String) = toApiName(nameFromPath(apiPath))
 
   def resourceNameFromFullPath(apiPath: String) = {
-    apiPath.split("/")(1).split("\\.")(0).replaceAll("/", "")
+    if (apiPath.startsWith("/v2"))
+    {
+      apiPath.split("/")(2).split("\\.")(0).replaceAll("/", "")
+    }
+    else
+    {
+      apiPath.split("/")(1).split("\\.")(0).replaceAll("/", "")
+    }
   }
 }

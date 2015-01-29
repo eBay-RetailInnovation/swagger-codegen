@@ -1,14 +1,18 @@
 import Foundation
 
-public class RIModel
+protocol _RIModelDictionaryInit: class
+{
+    init?(dictionary: [String: AnyObject])
+}
+
+public class RIModel: _RIModelDictionaryInit
 {
     init()
     {
     }
     
-    public convenience required init?(dictionary: [String: AnyObject])
+    public required init?(dictionary: [String: AnyObject])
     {
-        self.init()
     }
     
     public func dictionaryRepresentation() -> [String: AnyObject]
@@ -53,7 +57,7 @@ extension Array
     }
 }
 
-func RIBuildModelArray<T:RIModel>(input: [[String:AnyObject]]) -> [T]
+func RIBuildModelArray<T:_RIModelDictionaryInit>(input: [[String:AnyObject]]) -> [T]
 {
     return input.ri_filterMap({ (data) in T(dictionary: data) })
 }

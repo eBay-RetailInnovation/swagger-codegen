@@ -34,19 +34,27 @@ public class {{classname}}: RIModel
         super.init()
     }
     
-    public convenience required init?(dictionary: [String: AnyObject])
+    public required init?(dictionary: [String: AnyObject])
     {
         {{#vars}}
+        
+        println("Trying to map {{name}} of {{classname}}")
         
         {{#complexType}}
         
         {{#isContainer}}
-        if let {{name}}: {{#required}}{{datatype}} {{/required}}{{^required}}{{datatype}}? {{/required}} = (dictionary["{{baseName}}"] as? [[String:AnyObject]]).ri_flatMap(RIBuildModelArray)
+        let {{name}}DictionaryArray = dictionary["{{baseName}}"] as? [[String:AnyObject]]
+        let {{name}}ModelArray: {{datatype}}? = {{name}}DictionaryArray.ri_flatMap(RIBuildModelArray)
+        
+        if let {{name}}: {{#required}}{{datatype}} {{/required}}{{^required}}{{datatype}}? {{/required}} = {{name}}ModelArray
         {
         {{/isContainer}}
         
         {{^isContainer}}
-        if let {{name}} = (dictionary["{{baseName}}"] as? [String:AnyObject]).ri_flatMap({ (dictionary) in {{datatype}}(dictionary: dictionary) })
+        let {{name}}Dictionary = dictionary["{{baseName}}"] as? [String:AnyObject]
+        let {{name}}Model = {{name}}Dictionary.ri_flatMap({ (dictionary) in {{datatype}}(dictionary: dictionary) })
+        
+        if let {{name}}: {{#required}}{{datatype}} {{/required}}{{^required}}{{datatype}}? {{/required}} = {{name}}Model
         {
         {{/isContainer}}
         
@@ -58,13 +66,17 @@ public class {{classname}}: RIModel
         {{/complexType}}
         {{/vars}}
         
-        self.init({{#vars}}{{name}}: {{name}}{{#hasMore}}, {{/hasMore}}{{/vars}})
+        super.init()
+        {{#vars}}
+        self.{{name}} = {{name}}
+        {{/vars}}
         
         {{#vars}}
         }
         else
         {
-            self.init()
+            println("Failed")
+            super.init()
             return nil
         }
         {{/vars}}

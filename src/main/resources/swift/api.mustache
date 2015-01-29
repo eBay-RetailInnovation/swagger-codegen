@@ -30,6 +30,7 @@ extension {{classname}}
         {{#pathParams}}
         path = path.stringByReplacingOccurrencesOfString("{" + "{{baseName}}" + "}", withString: "\({{paramName}})")
         {{/pathParams}}
+        path = "http://localhost:8080" + path
         
         if let URL = NSURL(string: path)
         {
@@ -124,6 +125,10 @@ extension {{classname}}
                     failure(error: error)
                 }
             )
+        }
+        else
+        {
+            failure(error: nil)
         }
     }
 }

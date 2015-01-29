@@ -1,19 +1,9 @@
 import Foundation
 
-{{#operations}}
 public class {{classname}}
 {
-}
-
-
-{{#operation}}
-{{#returnBaseType}}
-extension {{returnBaseType}}
-{{/returnBaseType}}
-{{^returnBaseType}}
-extension {{classname}}
-{{/returnBaseType}}
-{
+    {{#operations}}
+    {{#operation}}
     /**
     {{{summary}}}
     {{#notes}}
@@ -131,7 +121,6 @@ extension {{classname}}
             failure(error: nil)
         }
     }
+    {{/operation}}
+    {{/operations}}
 }
-
-{{/operation}}
-{{/operations}}

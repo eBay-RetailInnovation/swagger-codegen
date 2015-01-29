@@ -38,8 +38,6 @@ public class {{classname}}: RIModel
     {
         {{#vars}}
         
-        println("Trying to map {{name}} of {{classname}}")
-        
         {{#complexType}}
         
         {{#isContainer}}
@@ -75,7 +73,6 @@ public class {{classname}}: RIModel
         }
         else
         {
-            println("Failed")
             super.init()
             return nil
         }

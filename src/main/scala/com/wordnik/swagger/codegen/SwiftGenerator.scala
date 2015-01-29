@@ -65,7 +65,7 @@ class SwiftGenerator extends BasicGenerator {
 
   // objective c doesn't like variables starting with "new"
   override def toVarName(name: String): String = {
-    val paramName = name.replaceAll("[^a-zA-Z0-9_]","")
+    val paramName = name.replaceAll("[^a-zA-Z0-9]","")
     
     val identifierFiltered = paramName match {
         case "id" => "identifier"

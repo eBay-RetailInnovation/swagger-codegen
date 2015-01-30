@@ -210,12 +210,14 @@ class SwiftGenerator extends BasicGenerator {
 
   override def toDefaultValue(properCase: String, obj: ModelProperty) = {
     properCase match {
-      case "boolean" => "false"
-      case "int" => "0"
+      case "Bool" => "false"
+      case "Int" => "0"
       case "long" => "0"
-      case "float" => "0"
-      case "double" => "0"
+      case "Float" => "0"
+      case "Double" => "0"
       case "Array" => "[]"
+      case "String" => "\"\""
+      case "CFAbsoluteTime" => "\"2015-01-28T20:48:43.250Z\""
       case _ => "nil"
     }
   }

@@ -25,6 +25,22 @@ public class RIModel: _RIModelDictionaryInit
     }
 }
 
+public enum RIAPIServer: String
+{
+    case Production = "https://api2.batcavelabs.com"
+    case Localhost = "http://localhost:8080"
+    
+    public var URL: NSURL?
+    {
+        return NSURL(string: self.rawValue)
+    }
+    
+    public func URLForPath(path: String) -> NSURL?
+    {
+        return NSURL(string: self.rawValue).ri_flatMap({ (URL) in NSURL(string: path, relativeToURL: URL) })
+    }
+}
+
 extension Optional
 {
     func ri_flatMap<U>(f: T -> U?) -> U?

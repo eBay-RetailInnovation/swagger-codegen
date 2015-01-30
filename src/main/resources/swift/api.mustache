@@ -15,15 +15,14 @@ public class {{classname}}
     !{{paramName}} {{description}}
     {{/allParams}}
     */
-    public class func {{nickname}}({{#allParams}}{{paramName}}: {{{dataType}}}, {{/allParams}}completion: {{#returnBaseType}}(output: {{returnType}}) -> () {{/returnBaseType}}{{^returnBaseType}}() -> () {{/returnBaseType}}, failure: (error: NSError?) -> ())
+    public class func {{nickname}}(APIServer: RIAPIServer, {{#allParams}}{{paramName}}: {{{dataType}}}, {{/allParams}}completion: {{#returnBaseType}}(output: {{returnType}}) -> () {{/returnBaseType}}{{^returnBaseType}}() -> () {{/returnBaseType}}, failure: (error: NSError?) -> ())
     {
         var path = "{{path}}"
         {{#pathParams}}
         path = path.stringByReplacingOccurrencesOfString("{" + "{{baseName}}" + "}", withString: "\({{paramName}})")
         {{/pathParams}}
-        path = "http://localhost:8080" + path
         
-        if let URL = NSURL(string: path)
+        if let URL = APIServer.URLForPath(path)
         {
             let builder = SVRequestParameterBuilder(URL: URL, method: .{{httpMethod}})
     

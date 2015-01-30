@@ -1,3 +1,6 @@
+import RetailInnovation
+import XCTest
+
 {{#models}}
 {{#model}}
 
@@ -10,6 +13,18 @@ class {{classname}}Tests: XCTestCase
             "{{baseName}}": {{#complexType}}{{#isContainer}}[{{baseDataType}}Tests.testingDictionary()]{{/isContainer}}{{^isContainer}}{{baseDataType}}Tests.testingDictionary(){{/isContainer}}{{/complexType}}{{^complexType}}{{{defaultValue}}}{{/complexType}}{{#hasMore}},{{/hasMore}}{{newline}}
             {{/vars}}
         ]
+    }
+    
+    func testParse()
+    {
+        let dictionary = {{classname}}Tests.testingDictionary()
+        let maybeModel = {{classname}}(dictionary: dictionary)
+        XCTAssertNotNil(maybeModel, "{{classname}} did not parse correctly")
+        
+        if let model = maybeModel
+        {
+            XCTAssertTrue(model.dictionaryRepresentation() == dictionary, "Dictionary representation of {{classname}} not equal to input")
+        }
     }
 }
 

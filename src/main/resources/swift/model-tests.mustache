@@ -6,9 +6,9 @@ class {{classname}}Tests: XCTestCase
     class func testingDictionary() -> [String:AnyObject]
     {
         return [
-        {{#vars}}
-        "{{baseName}}": {{#complexType}}{{#isContainer}}[{{baseDataType}}Tests.testingDictionary()]{{/isContainer}}{{^isContainer}}{{baseDataType}}Tests.testingDictionary(){{/isContainer}}{{/complexType}}{{^complexType}}{{defaultValue}}{{/complexType}}{{#hasMore}},{{/hasMore}}
-        {{/vars}}
+            {{#vars}}
+            "{{baseName}}": {{#complexType}}{{#isContainer}}[{{baseDataType}}Tests.testingDictionary()]{{/isContainer}}{{^isContainer}}{{baseDataType}}Tests.testingDictionary(){{/isContainer}}{{/complexType}}{{^complexType}}{{{defaultValue}}}{{/complexType}}{{#hasMore}},{{/hasMore}}{{newline}}
+            {{/vars}}
         ]
     }
 }

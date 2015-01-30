@@ -42,7 +42,7 @@ public class {{classname}}: RIModel
         
         {{#isContainer}}
         let {{name}}DictionaryArray = dictionary["{{baseName}}"] as? [[String:AnyObject]]
-        let {{name}}ModelArray: {{datatype}}? = {{name}}DictionaryArray.ri_flatMap(RIBuildModelArray)
+        let {{name}}ModelArray: {{datatype}}? = {{name}}DictionaryArray.ri_flatMap({ ({{name}}Array) in {{name}}Array.ri_filterMap({ ({{name}}Item) in {{baseDataType}}(dictionary: {{name}}Item) })})
         
         if let {{name}}: {{#required}}{{datatype}} {{/required}}{{^required}}{{datatype}}? {{/required}} = {{name}}ModelArray
         {

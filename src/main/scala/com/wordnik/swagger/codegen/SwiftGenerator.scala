@@ -103,6 +103,30 @@ class SwiftGenerator extends BasicGenerator {
 
   // package for api classes
   override def apiPackage: Option[String] = None
+  
+  // model classes
+  override def processModelMap(m: Map[String, AnyRef]): Map[String, AnyRef] = {
+    val map = super.processModelMap(m)
+    
+    map.map(k => {
+      k._1 match {
+        case e: String if (e == "vars") => {
+          (k._1, k._2.asInstanceOf[scala.collection.mutable.ListBuffer[scala.collection.mutable.HashMap[String,AnyRef]]].map(v => {
+            v.get("datatype") match {
+              case Some(datatype) => {
+                v += "baseDataType" -> (datatype.asInstanceOf[String]).replaceAll("\\[", "").replaceAll("\\]", "")
+              }
+              case _ =>
+            }
+            v
+          }))
+        }
+        case _ => k
+      }
+    })
+    
+    return map
+  }
 
   // response classes
   override def processResponseClass(responseClass: String): Option[String] = {

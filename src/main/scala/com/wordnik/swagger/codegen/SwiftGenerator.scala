@@ -91,6 +91,7 @@ class SwiftGenerator extends BasicGenerator {
 
   // template used for models
   modelTemplateFiles += "model.mustache" -> ".swift"
+  modelTemplateFiles += "model-tests.mustache" -> "Tests.swift"
 
   // template used for apis
   apiTemplateFiles += "api.mustache" -> ".swift"

@@ -8,11 +8,16 @@ class {{classname}}Tests: XCTestCase
 {
     class func testingDictionary() -> [String:AnyObject]
     {
+        {{#hasVars}}
         return [
             {{#vars}}
             "{{baseName}}": {{#complexType}}{{#isContainer}}[{{baseDataType}}Tests.testingDictionary()]{{/isContainer}}{{^isContainer}}{{baseDataType}}Tests.testingDictionary(){{/isContainer}}{{/complexType}}{{^complexType}}{{{defaultValue}}}{{/complexType}}{{#hasMore}},{{/hasMore}}{{newline}}
             {{/vars}}
         ]
+        {{/hasVars}}
+        {{^hasVars}}
+        return [:]
+        {{/hasVars}}
     }
     
     func testParse()

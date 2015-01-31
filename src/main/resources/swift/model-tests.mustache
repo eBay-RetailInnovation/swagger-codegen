@@ -28,7 +28,7 @@ class {{classname}}Tests: XCTestCase
         
         if let model = maybeModel
         {
-            XCTAssertTrue(model.dictionaryRepresentation() == dictionary, "Dictionary representation of {{classname}} not equal to input")
+            XCTAssertTrue((model.dictionaryRepresentation() as NSDictionary).isEqualToDictionary(dictionary), "Dictionary representation of {{classname}} not equal to input")
         }
     }
 }
